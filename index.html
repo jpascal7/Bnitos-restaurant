@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=width-device, scale-initial=1" />
 
   <title>Benitos Restaurant | Ciudad David, Chiriquí</title>
   <meta name="description" content="Benitos Restaurant en Ciudad David: mariscos, parrilla y cocina contemporánea. Reservas por WhatsApp +507 6215-0935. Abierto todos los días 11:00–9:30 pm." />
@@ -89,18 +89,57 @@
     .reveal.is-in{opacity:1;transform:none}
 
     .wa-float{position:fixed;right:18px;bottom:18px;z-index:60;background:#25D366;color:#0c0c0c;border-radius:999px;padding:12px 16px;box-shadow:0 10px 22px rgba(0,0,0,.35);display:flex;align-items:center;gap:10px;font-weight:700}
+  
+  /* Menú móvil */
+.menu-toggle{
+  display:none; align-items:center; justify-content:center;
+  background:transparent; border:1px solid var(--border);
+  border-radius:10px; padding:.55rem .7rem; color:var(--text);
+}
+.menu-toggle .bar{display:block; width:22px; height:2px; background:var(--text); margin:4px 0}
+
+@media (max-width: 900px){
+  .nav {height:62px}
+  .nav-links{
+    position: fixed; left:0; right:0; top:62px; bottom:auto;
+    display:none; flex-direction:column; gap:14px; padding:14px 16px;
+    background:var(--surface); border-bottom:1px solid var(--border); z-index:49;
+  }
+  .nav-links.open{display:flex}
+  .menu-toggle{display:inline-flex}
+  /* Oculta el botón grande del header en pantallas pequeñas (ya tienes WA flotante) */
+  header .btn.btn--primary{display:none}
+}
+
+/* Botones más cómodos en móvil */
+@media (max-width: 520px){
+  .cta-group{flex-direction:column}
+  .cta-group .btn{width:100%}
+  .gallery{grid-template-columns:1fr} /* 1 columna en móviles muy pequeños */
+}
   </style>
 </head>
 <body>
   <header>
-    <div class="container nav">
-      <div class="brand"><div class="mark">B</div><div>Benitos <em>Restaurant</em></div></div>
-      <nav class="nav-links">
-        <a href="#menu">Menú</a><a href="#bodega">Bodega</a><a href="#galeria">Galería</a><a href="#reservas">Reservas</a><a href="#contacto">Contacto</a>
-      </nav>
-      <a class="btn btn--primary" href="https://wa.me/50762150935?text=Hola%20Benitos%2C%20quisiera%20reservar" target="_blank" rel="noopener">WhatsApp</a>
-    </div>
-  </header>
+  <div class="container nav">
+    <div class="brand"><div class="mark">B</div><div>Benitos <em>Restaurant</em></div></div>
+
+    <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú" aria-expanded="false">
+      <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+    </button>
+
+    <nav class="nav-links" id="primaryNav" aria-label="Principal">
+      <a href="#menu">Menú</a>
+      <a href="#bodega">Bodega</a>
+      <a href="#galeria">Galería</a>
+      <a href="#reservas">Reservas</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+
+    <a class="btn btn--primary" href="https://wa.me/50762150935?text=Hola%20Benitos%2C%20quisiera%20reservar" target="_blank" rel="noopener">WhatsApp</a>
+  </div>
+</header>
+  
 
   <main>
     <section class="hero">
@@ -234,6 +273,17 @@
     document.getElementById('year').textContent = new Date().getFullYear();
     const io = new IntersectionObserver((es)=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('is-in');io.unobserve(e.target)}}),{threshold:.2});
     document.querySelectorAll('.reveal,.card,.gallery').forEach(el=>io.observe(el));
-  </script>
+  </script> <script>
+  const toggle = document.getElementById('menuToggle');
+  const nav = document.getElementById('primaryNav');
+  toggle?.addEventListener('click', ()=>{
+    nav.classList.toggle('open');
+    const open = nav.classList.contains('open');
+    toggle.setAttribute('aria-expanded', open);
+    // Evita scroll del body cuando el menú está abierto en móvil
+    document.body.style.overflow = open ? 'hidden' : '';
+  });
+</script>
 </body>
 </html>
+
